@@ -1,30 +1,59 @@
-import { View, FlatList } from 'react-native';
+import { View, FlatList, SafeAreaView, Text } from 'react-native';
 import { useEffect, useState } from 'react';
 import RecipeCard from '../components/RecipeCard';
-import { getFavorites, Recipe } from '../utils/api';
+import { getFavorites, removeFavorite, Favorite } from '../utils/api';
+
 
 export default function FavoritesScreen() {
-  const [favorites, setFavorites] = useState<Recipe[]>([]);
+  const [favorites, setFavorites] = useState<Favorite[]>([]);
 
   useEffect(() => {
-    async function fetchFavorites() {
-      try {
-        const data = await getFavorites();
-        setFavorites(data);
-      } catch (error) {
-        console.error('Erro ao buscar favoritos:', error);
-      }
-    }
     fetchFavorites();
   }, []);
 
+  async function fetchFavorites() {
+    try {
+      const data = await getFavorites();
+      setFavorites(data);
+    } catch (error) {
+      console.error('Erro ao buscar favoritos:', error);
+    }
+  }
+
+
+
+  async function handleRemoveFavorite(fav: Favorite) {
+    try {
+      await removeFavorite(fav.id.toString());
+      fetchFavorites();
+    } catch (error) {
+      console.error('Erro ao remover favorito:', error);
+    }
+  }
+
+  
   return (
-    <View>
+    <SafeAreaView style={{ flex: 1, padding: 8, backgroundColor: '#FFFFFF', paddingBottom: 80 }}>
       <FlatList
         data={favorites}
-        keyExtractor={(item) => item.idMeal}
-        renderItem={({ item }) => <RecipeCard recipe={item} />}
+        keyExtractor={(item) => item.id.toString()}
+        ListEmptyComponent={
+          <Text style={{ textAlign: 'center', marginTop: 20 }}>Nenhum favorito adicionado.</Text>
+        }
+        renderItem={({ item }) => (
+          <RecipeCard
+            recipe={{
+              id: item.recipe_id,
+              name: item.name,
+              instructions: item.instructions,
+              imageUrl: item.image_url,
+            }}
+            isFavorite={true}
+            onDelete={() => handleRemoveFavorite(item)}
+          />
+        )}
       />
-    </View>
+    </SafeAreaView>
   );
+
 }

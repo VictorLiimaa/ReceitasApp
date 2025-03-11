@@ -7,7 +7,12 @@ interface InputFieldProps {
   multiline?: boolean;
 }
 
-export default function InputField({ placeholder, value, onChangeText, multiline = false }: InputFieldProps) {
+export default function InputField({
+  placeholder,
+  value,
+  onChangeText,
+  multiline = false,
+}: InputFieldProps) {
   return (
     <View style={styles.container}>
       <TextInput
@@ -20,6 +25,7 @@ export default function InputField({ placeholder, value, onChangeText, multiline
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -36,4 +42,5 @@ const styles = StyleSheet.create({
     height: 80,
     textAlignVertical: 'top',
   },
+  
 });

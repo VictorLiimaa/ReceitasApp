@@ -1,17 +1,18 @@
-import { TextInput, View } from 'react-native';
+import { TextInput, View, StyleSheet } from 'react-native';
 import { useState } from 'react';
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
 }
 
+
 export default function SearchBar({ onSearch }: SearchBarProps) {
   const [query, setQuery] = useState('');
 
   return (
-    <View className="flex-row bg-gray-100 p-2 rounded-lg">
+    <View style={styles.container}>
       <TextInput
-        className="flex-1 p-2"
+        style={styles.input}
         placeholder="Pesquisar receitas..."
         value={query}
         onChangeText={setQuery}
@@ -20,3 +21,15 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
     </View>
   );
 }
+
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#F0F0F0',
+    borderRadius: 8,
+    padding: 8,
+  },
+  input: {
+    fontSize: 16,
+  },
+});
